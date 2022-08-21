@@ -4,6 +4,7 @@ class Player{
         this.index = null
         this.x = 50
         this.y = 0
+        this.move = false
     }
 
     addPlayer(){
@@ -18,6 +19,7 @@ class Player{
             name: this.name,
             x: this.x,
             y: this.y, 
+            move: this.move
         })
         
     }
@@ -39,7 +41,7 @@ class Player{
         database.ref(playerIndex).update({
             x: this.x,
             y: this.y,
-            
+            move: this.move,
         })
     }
 

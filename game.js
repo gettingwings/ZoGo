@@ -3,6 +3,7 @@ class Game{
         this.resetButton = createButton("Reset");
         this.resetButton.class("resetButton");
         this.resetButton.position(width-100,60);
+         
     }
 
     getState(){
@@ -33,27 +34,31 @@ class Game{
          player2 = createSprite(50,height/2+75);
          player2.addAnimation("p2running",player2Img);
          
-         players = [player1, player2];
+         players = [player1, player2];// array of sprite
     }
 
     play(){
          drawSprites();
          form.hide();
          //vel = 0.1;
-         bg.velocityX = -vel;
-         if (bg.x < 0){
-            bg.x = bg.width/2;
-         }
-         player.getAllPlayers();
+        //  bg.velocityX = -vel;
+        //  if (bg.x < 0){
+        //     bg.x = bg.width/2;
+        //  }
+
+
+         player.getAllPlayers();// object
         
          if (allPlayers !== undefined){
             var index = 1;
+            // player1 , player2
             for(var plr in allPlayers){
                 var x = allPlayers[plr].x;
                 var y = allPlayers[plr].y;
 
                 players[index-1].x = x;
                 players[index-1].y = y;
+                player.move = allPlayers[plr].move;
 
                 if(index == player.index){
                     stroke("white")
@@ -62,7 +67,13 @@ class Game{
 
                     //camera.position.x = players[index-1].x
                 }
-                index += 1;  
+                index += 1; 
+
+                if(player.move == true){  
+                    players[player.index-1].play();
+                }else{
+                    players[player.index-1].pause();
+                }
             }
 
             this.playerMovement();
@@ -73,23 +84,32 @@ class Game{
     }
 
     playerMovement(){
+
        if( keyIsDown(UP_ARROW)){
+            player.move = true
             player.y -= 5;
             player.updatePlayer()
         }
         if( keyIsDown(DOWN_ARROW)){
+            player.move = true
             player.y += 5;
             player.updatePlayer()
         }
         if( keyIsDown(LEFT_ARROW)){
+            player.move = true
             player.x -= 5;
             //player.mirrorX(player.mirrorX() * -1);
             players[player.index-1].mirrorX(-1);
             player.updatePlayer()
         }
         if( keyIsDown(RIGHT_ARROW)){
+            player.move = true
             player.x += 5;
             players[player.index-1].mirrorX(1);
+            player.updatePlayer()
+        }
+        if( keyWentUp(UP_ARROW)||keyWentUp(DOWN_ARROW)|| keyWentUp(RIGHT_ARROW)||keyWentUp(LEFT_ARROW)){
+            player.move = false
             player.updatePlayer()
         }
     }
