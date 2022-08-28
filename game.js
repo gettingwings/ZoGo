@@ -40,18 +40,15 @@ class Game{
     play(){
          drawSprites();
          form.hide();
-         //vel = 0.1;
-        //  bg.velocityX = -vel;
-        //  if (bg.x < 0){
-        //     bg.x = bg.width/2;
-        //  }
-
-
+        
          player.getAllPlayers();// object
+         fill("white")
+         text("life: "+player.life,width/2,20);
+         text("potion: "+player.potion,width/2,50);
         
          if (allPlayers !== undefined){
             var index = 1;
-            // player1 , player2
+            //value of plr: player1 , player2
             for(var plr in allPlayers){
                 var x = allPlayers[plr].x;
                 var y = allPlayers[plr].y;
@@ -66,25 +63,31 @@ class Game{
                     ellipse(x-7,y+45,40,10);
 
                     //camera.position.x = players[index-1].x
-                }
-                index += 1; 
 
-                if(player.move == true){  
-                    players[player.index-1].play();
-                }else{
-                    players[player.index-1].pause();
+                    if(player.move == true){  
+                        players[player.index-1].play();
+                    }else{
+                        players[player.index-1].pause();
+                    }
                 }
+                index += 1;     
+            }
+
+            if(player.life<=0){
+                gameState = 2
+                this.gameEnd();
             }
 
             this.playerMovement();
             this.spawnZombies();
+            this.spawnPotion()
+            this.checkCollision();
             this.reset();
             
-         }
+        }
     }
 
     playerMovement(){
-
        if( keyIsDown(UP_ARROW)){
             player.move = true
             player.y -= 5;
@@ -123,14 +126,13 @@ class Game{
           });
           window.location.reload();
         });
-      }
+    }
 
     spawnZombies(){
         if(frameCount% random([300,400,500,600]) == 0){
             var x = random(width/2,width);
             var y = random(0,height);
             var zombie = createSprite(x,y, 15,15);
-            
             
             var animeVelX = 0;
             var animeVelY = 0; 
@@ -158,7 +160,48 @@ class Game{
             zombie.velocityX = animeVelX;
             zombie.velocityY = animeVelY;
             zombie.lifetime = life; 
+            zombieGroup.add(zombie);
+
+            if(zombie.x<5){ zombie.velocityX *= -1}
+            if(zombie.x>width-5){ zombie.velocityX *= -1}
+            if(zombie.y<5){ zombie.velocityY *= -1}
+            if(zombie.y>height-5){ zombie.velocityY *= -1}
         }
 
     }  
+
+    checkCollision(){
+        players[player.index-1].overlap(zombieGroup, function(plr, zom){
+            player.life -= 1;
+            player.x += -1 * player.velocityX 
+            zom.remove()
+            player.updatePlayer();
+        })
+
+        players[player.index-1].overlap(potionGroup, function(plr, pot){
+            player.potion += 1;
+            player.updatePlayer();
+            pot.remove();
+        })   
+    }
+
+    spawnPotion(){
+        if(frameCount% random([450,550,650]) == 0){
+            var x = random(50,width-50);
+            var y = random(50,height-50);
+            var potion = createSprite(x,y, 15,15);
+            potion.addAnimation("potion", potionImg);
+            potion.scale = 0.05;
+            potion.life = random([50,80,100]);
+            potionGroup.add(potion)
+        }
+    }
+
+    gameEnd(){
+
+        console.log("Game Ended")
+        console.log("life "+player.life)
+        console.log(player.name+" ,you collected "+player.potion+" potion")
+        gameState = 4
+    }
 }
