@@ -5,6 +5,8 @@ class Player{
         this.x = 50
         this.y = 0
         this.move = false
+        this.life = 3
+        this.potion = 0
     }
 
     addPlayer(){
@@ -19,7 +21,9 @@ class Player{
             name: this.name,
             x: this.x,
             y: this.y, 
-            move: this.move
+            move: this.move,
+            life: this.life,
+            potion: this.potion
         })
         
     }
@@ -42,6 +46,8 @@ class Player{
             x: this.x,
             y: this.y,
             move: this.move,
+            life: this.life,
+            potion: this.potion
         })
     }
 
