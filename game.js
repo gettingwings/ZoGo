@@ -202,10 +202,18 @@ class Game{
     }
 
     gameEnd(){
-
-        alert("Game Ended")
+        
         console.log("life "+player.life)
         console.log(player.name+" ,you collected "+player.potion+" potion")
-        gameState = 3
+    
+        swal({
+            title: `Game Over`,
+            text: "Oops you lost the game....!!!",
+            imageUrl:
+            "./images/potion.png",
+            imageSize: "100x100",
+            confirmButtonText: "Thanks For Playing"
+        });
+
     }
 }
