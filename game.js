@@ -69,7 +69,8 @@ class Game{
                     }else{
                         players[player.index-1].pause();
                     }
-                }
+                } 
+
                 index += 1;     
             }
 
@@ -77,6 +78,7 @@ class Game{
                 gameState = 2
                 this.gameEnd();
             }
+
 
             this.playerMovement();
             this.spawnZombies();
@@ -88,24 +90,24 @@ class Game{
     }
 
     playerMovement(){
-       if( keyIsDown(UP_ARROW)){
+       if( keyIsDown(UP_ARROW) &&  players[player.index-1].y>25){
             player.move = true
             player.y -= 5;
             player.updatePlayer()
         }
-        if( keyIsDown(DOWN_ARROW)){
+        if( keyIsDown(DOWN_ARROW) &&  players[player.index-1].y<width-50){
             player.move = true
             player.y += 5;
             player.updatePlayer()
         }
-        if( keyIsDown(LEFT_ARROW)){
+        if( keyIsDown(LEFT_ARROW) &&  players[player.index-1].x>25){
             player.move = true
             player.x -= 5;
             //player.mirrorX(player.mirrorX() * -1);
             players[player.index-1].mirrorX(-1);
             player.updatePlayer()
         }
-        if( keyIsDown(RIGHT_ARROW)){
+        if( keyIsDown(RIGHT_ARROW) &&  players[player.index-1].x<width-25){
             player.move = true
             player.x += 5;
             players[player.index-1].mirrorX(1);
@@ -162,10 +164,11 @@ class Game{
             zombie.lifetime = life; 
             zombieGroup.add(zombie);
 
-            if(zombie.x<5){ zombie.velocityX *= -1}
-            if(zombie.x>width-5){ zombie.velocityX *= -1}
-            if(zombie.y<5){ zombie.velocityY *= -1}
-            if(zombie.y>height-5){ zombie.velocityY *= -1}
+            if(zombie.x<10){ zombie.velocityX *= -1}
+            if(zombie.x>width-10){ zombie.velocityX *= -1}
+            if(zombie.y<10){ zombie.velocityY *= -1}
+            if(zombie.y>height-10){ zombie.velocityY *= -1}
+
         }
 
     }  
@@ -174,6 +177,8 @@ class Game{
         players[player.index-1].overlap(zombieGroup, function(plr, zom){
             player.life -= 1; 
             zom.remove()
+            plr.rotation=10
+            setTimeout(function(){plr.rotation=0}, 2000)
             player.updatePlayer();
         })
 
@@ -198,9 +203,9 @@ class Game{
 
     gameEnd(){
 
-        console.log("Game Ended")
+        alert("Game Ended")
         console.log("life "+player.life)
         console.log(player.name+" ,you collected "+player.potion+" potion")
-        gameState = 4
+        gameState = 3
     }
 }
