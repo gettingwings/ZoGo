@@ -190,7 +190,7 @@ class Game{
             var y = random(50,height-50);
             var potion = createSprite(x,y, 15,15);
             potion.addAnimation("potion", potionImg);
-            potion.scale = 0.05;
+            potion.scale = 0.1;
             potion.life = random([50,80,100]);
             potionGroup.add(potion)
         }
