@@ -172,8 +172,7 @@ class Game{
 
     checkCollision(){
         players[player.index-1].overlap(zombieGroup, function(plr, zom){
-            player.life -= 1;
-            player.x += -1 * player.velocityX 
+            player.life -= 1; 
             zom.remove()
             player.updatePlayer();
         })
